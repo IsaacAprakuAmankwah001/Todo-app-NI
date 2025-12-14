@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Todo-App-NI",
-    "slug": "Todo-App-NI",
+    "slug": "todo-app-ni",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -43,6 +43,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "1bdcc40a-d61c-4e06-ab84-2656d9a82b47"
+      }
+    },
+    "owner": "nine-organization"
   }
 }
