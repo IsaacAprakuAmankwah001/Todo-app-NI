@@ -89,7 +89,7 @@ const darkColors: ColorScheme = {
 interface ThemeContextType {
   isDarkMode: boolean;
   colors: ColorScheme;
-  toggleTheme: () => void;
+  toggleDarkMode: () => void;
 }
 
 const ThemeContext = createContext< undefined |ThemeContextType>(undefined);
@@ -113,7 +113,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const colors = isDarkMode ? darkColors : lightColors;
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, colors, toggleTheme: toggleDarkMode }}>
+    <ThemeContext.Provider value={{ isDarkMode, colors, toggleDarkMode }}>
       {children}
     </ThemeContext.Provider>
   );
