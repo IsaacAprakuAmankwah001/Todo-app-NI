@@ -20,6 +20,7 @@ export default function Index() {
 
   const todos = useQuery(api.todos.getTodos);
   const toggleTodo = useMutation(api.todos.toggleTodo);
+  const deleteTodo = useMutation(api.todos.deleteTodo);
 
   const isLoading = todos === undefined;
 
@@ -30,9 +31,20 @@ export default function Index() {
       await toggleTodo({ id });
     } catch (error) {
       console.log("Error toggling todo:", error);
-      Alert.alert("Error", "Failed to update the todo. Please try again.");
+      Alert.alert("Error", "Failed to toggle todo. Please try again.");
     }
   };
+
+  const handleDeleteTodo = async (id: Id<"todos">) => {
+      Alert.alert("Delete Todo", "Are you sure you want to delete this todo?", [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => deleteTodo({ id }),
+        },
+      ]);
+    };
 
   const renderTodoItem = ({ item }: { item: Todo }) => (
     <View style={homeStyles.todoItemWrapper}>
@@ -80,7 +92,7 @@ export default function Index() {
                 <Ionicons name="pencil" size={14} color="#ffffff"/>
               </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.8} onPress={()=>{}}>
+            <TouchableOpacity activeOpacity={0.8} onPress={()=> handleDeleteTodo(item._id)}>
               <LinearGradient 
               colors={colors.gradients.danger}
               style={homeStyles.actionButton}
@@ -107,6 +119,7 @@ export default function Index() {
           style={homeStyles.todoList}
           contentContainerStyle={homeStyles.todoListContent}
           ListEmptyComponent={<EmptyState />}
+          //showsVerticalScrollIndicator={false}
         />
       
       </SafeAreaView>
