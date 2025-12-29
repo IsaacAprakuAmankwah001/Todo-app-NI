@@ -9,7 +9,8 @@ import useTheme from "@/hooks/useTheme";
 import { Ionicons } from '@expo/vector-icons';
 import { useMutation, useQuery } from "convex/react";
 import { LinearGradient } from 'expo-linear-gradient';
-import { Alert, FlatList, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { Alert, FlatList, StatusBar, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type Todo = Doc<"todos">;
@@ -18,9 +19,13 @@ export default function Index() {
   const { colors } = useTheme();
   const homeStyles = createHomeStyles(colors);
 
+const [editedId, setEditedId] = useState<Id<"todos"> | null>(null);
+const [editedTitle, setEditedTitle] = useState<string>(""); 
+
   const todos = useQuery(api.todos.getTodos);
   const toggleTodo = useMutation(api.todos.toggleTodo);
   const deleteTodo = useMutation(api.todos.deleteTodo);
+  const updateTodo = useMutation(api.todos.updateTodo);
 
   const isLoading = todos === undefined;
 
@@ -46,9 +51,35 @@ export default function Index() {
       ]);
     };
 
-  const renderTodoItem = ({ item }: { item: Todo }) => (
-    <View style={homeStyles.todoItemWrapper}>
-      <LinearGradient 
+  const handleEditTodo =  ( todo: Todo) => {
+    setEditedId(todo._id);
+    setEditedTitle(todo.title);
+  };
+  const handleSaveEdit =  async( todo: Todo) => {
+
+    if (editedId ) {
+      try {
+        await updateTodo({ id: editedId, title: editedTitle.trim() });
+        setEditedId(null);
+        setEditedTitle("");
+      } catch (error) {
+        console.log("Error updating todo:", error);
+      Alert.alert("Error", "Failed to update todo. Please try again.");
+    } 
+   }
+  };
+
+  const handleCancelEdit =  ( todo: Todo) => {
+    setEditedId(null);
+    setEditedTitle("");
+  };
+
+
+  const renderTodoItem = ({ item }: { item: Todo }) => {
+        const isEditing = editedId === item._id;
+        return (   
+           <View style={homeStyles.todoItemWrapper}>
+        <LinearGradient 
       colors={colors.gradients.surface}
       style ={homeStyles.todoItem}
       start={{x:0, y:0}}
@@ -69,7 +100,33 @@ export default function Index() {
 
           </LinearGradient>
         </TouchableOpacity>
-        <View>
+        
+        
+        {isEditing? (
+          <View style={homeStyles.editContainer}>
+            <TextInput
+              value={editedTitle}
+              onChangeText={setEditedTitle}
+              style={homeStyles.editInput}
+              autoFocus
+              multiline
+              placeholder="Edit your todo ..."
+              placeholderTextColor={colors.textMuted}
+            />
+            <View style={homeStyles.editButtons}>
+              <TouchableOpacity activeOpacity={0.8} onPress={()=> handleSaveEdit}>
+                <LinearGradient 
+                colors={colors.gradients.success}
+                style={homeStyles.editButton}
+                >
+                  <Ionicons name="checkmark" size={16} color="#ffffff"/>
+                  <Text style={homeStyles.editButtonText}>Save</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ) : (
+          <View style={homeStyles.todoTextContainer}>
           <Text
           style={[
             homeStyles.todoText,
@@ -84,7 +141,7 @@ export default function Index() {
           </Text>
 
           <View style={homeStyles.todoActions}>
-            <TouchableOpacity activeOpacity={0.8} onPress={()=>{}}>
+            <TouchableOpacity activeOpacity={0.8} onPress={()=> handleEditTodo(item)}>
               <LinearGradient 
               colors={colors.gradients.warning}
               style={homeStyles.actionButton}
@@ -102,9 +159,12 @@ export default function Index() {
             </TouchableOpacity>
           </View>
         </View>
+        )}
       </LinearGradient>
     </View>
   );
+
+  }
   return (
     <LinearGradient colors={colors.gradients.background} style={homeStyles.container}>
       <StatusBar  barStyle={colors.statusBarStyle } />
