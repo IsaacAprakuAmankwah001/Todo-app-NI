@@ -78,7 +78,7 @@ const [editedTitle, setEditedTitle] = useState<string>("");
   const renderTodoItem = ({ item }: { item: Todo }) => {
         const isEditing = editedId === item._id;
         return (   
-           <View style={homeStyles.todoItemWrapper}>
+      <View style={homeStyles.todoItemWrapper}>
         <LinearGradient 
       colors={colors.gradients.surface}
       style ={homeStyles.todoItem}
@@ -114,7 +114,7 @@ const [editedTitle, setEditedTitle] = useState<string>("");
               placeholderTextColor={colors.textMuted}
             />
             <View style={homeStyles.editButtons}>
-              <TouchableOpacity activeOpacity={0.8} onPress={()=> handleSaveEdit}>
+              <TouchableOpacity activeOpacity={0.8} onPress={()=> handleSaveEdit(item)}>
                 <LinearGradient 
                 colors={colors.gradients.success}
                 style={homeStyles.editButton}
