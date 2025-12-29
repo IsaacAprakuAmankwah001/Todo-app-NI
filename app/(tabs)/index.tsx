@@ -123,6 +123,16 @@ const [editedTitle, setEditedTitle] = useState<string>("");
                   <Text style={homeStyles.editButtonText}>Save</Text>
                 </LinearGradient>
               </TouchableOpacity>
+
+              <TouchableOpacity activeOpacity={0.8} onPress={()=> handleCancelEdit}>
+                <LinearGradient 
+                colors={colors.gradients.muted}
+                style={homeStyles.editButton}
+                >
+                  <Ionicons name="close" size={16} color="#ffffff"/>
+                  <Text style={homeStyles.editButtonText}>Cancel</Text>
+                </LinearGradient>
+              </TouchableOpacity>
             </View>
           </View>
         ) : (
