@@ -56,7 +56,7 @@ const [isAutoSync, setIsAutoSync] = useState(true);
         </View>
         <Switch
           value={isAutoSync}
-          onValueChange={setIsAutoSync}
+          onValueChange={() => setIsAutoSync(!isAutoSync)}
             thumbColor={isAutoSync ? colors.primary : '#f4f3f4'}
             trackColor={{ false: '#767577', true: colors.success}}
         />
