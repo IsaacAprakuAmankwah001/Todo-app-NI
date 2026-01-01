@@ -51,7 +51,7 @@ const DangerZone = () => {
                 <LinearGradient colors={colors.gradients.danger} style={settingsStyles.actionIcon}>
                     <Ionicons name="trash" size={24} color="#ffffff" />
                 </LinearGradient>
-                <Text style={settingsStyles.actionText}>Reset App</Text>
+                <Text style={settingsStyles.actionTextDanger}>Reset App</Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
         </TouchableOpacity>
